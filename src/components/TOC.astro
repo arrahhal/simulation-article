@@ -1,0 +1,78 @@
+---
+import type { MarkdownHeading } from 'astro';
+type Props = {
+  headings: MarkdownHeading[];
+}
+
+type HeadingWithSubheadings = MarkdownHeading & {
+  subheadings: MarkdownHeading[];
+};
+
+const { headings } = Astro.props;
+const toc = headings.reduce((tree, h) => {
+  if (h.depth === 2) {
+    tree.push({...h, subheadings: []});
+  } else if (h.depth === 3) {
+    tree.at(-1)?.subheadings.push(h);
+  } 
+  return tree;
+}, [] as HeadingWithSubheadings[]); 
+
+---
+<div>
+  <button id="btn-table-of-content" >جدول المحتويات</button>
+  <nav id="table-of-contents" aria-label="Table Of Contents">
+    <ol>
+      {
+      toc.map((h) => (
+      <li>
+        <a href={`#${h.slug}`}>{h.text}</a>
+        {h.subheadings.length > 0 && (
+        <ol>
+          {h.subheadings.map((sub) => (
+          <li>
+            <a href={`#${sub.slug}`}>{sub.text}</a>
+          </li>
+          ))}
+        </ol>
+        )}
+      </li>
+      ))
+      }
+    </ol>
+  </nav>
+</div>
+<style>
+button {
+  border: none;
+  font: inherit;
+  width: 100%;
+  text-align: inherit;  
+  padding: 4px 4px;
+  background-color: #efefff;
+  cursor: pointer;
+  outline: none;
+}
+button:hover, button.expanded {
+  background-color: #cfcfef;
+  outline: none;
+}
+nav {
+  max-height: 0;
+}
+nav.expanded {
+  max-height: fit-content;
+}
+div {
+  overflow: hidden;
+}
+</style>
+<script>
+const tocEl = document.querySelector("#table-of-contents");
+const tocBtn = document.querySelector("#btn-table-of-content");
+const toggleTableOfContent = () => {
+  tocEl?.classList.toggle("expanded");
+  tocBtn?.classList.toggle("expanded");
+}
+tocBtn?.addEventListener("click", toggleTableOfContent);
+</script>

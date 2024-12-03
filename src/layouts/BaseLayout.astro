@@ -1,0 +1,29 @@
+---
+import "../styles/global.css";
+import TOC from "../components/TOC.astro";
+const {headings} = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>نمذجة نظام طاقة شمسية منزلية</title>
+	</head>
+	<body>
+    <head>
+      <TOC headings={headings} />
+    </head>
+    <slot />
+    <footer>
+      <nav>
+        <ul>
+          <li><a target="_blank" href="https://github.com/arrahhal/simulation-assignment">مستودع الكود على جيت‌هب</a></li>
+          <li><a target="_blank" href="https://drive.google.com/file/d/1nolB1a91fuHIaypmlGouEtDxly87gLkn/view?usp=sharing">ملف البحث pdf</a></li>
+        </ul>
+      </nav>
+    </footer>
+	</body>
+</html>

@@ -1,0 +1,8 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const posts = await Astro.glob('./posts/index.md');
+const  Content  = posts[0].Content;
+---
+<BaseLayout headings={posts[0].getHeadings()}>
+<Content />
+</BaseLayout>
